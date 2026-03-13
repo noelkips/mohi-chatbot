@@ -19,6 +19,43 @@ python manage.py runserver 127.0.0.1:8000
 
 Open `http://127.0.0.1:8000/`.
 
+## Configure Real Responses
+1. Edit `.env` in the project root and set `OPENAI_API_KEY`.
+2. Put your PDF or DOCX files in `knowledge_base/`.
+3. Build the local vector database:
+
+```bash
+python ingest_knowledge.py
+```
+
+4. Start Django:
+
+```bash
+python manage.py runserver 127.0.0.1:8000
+```
+
+If the Django development server exits unexpectedly on Windows, use the local WSGI server instead:
+
+```bash
+python serve.py
+```
+
+If the knowledge database is missing or the API key is blank, Rafiki falls back to the built-in responses.
+
+## Google Drive Sync
+If your manuals live in Google Drive instead of the local folder:
+
+1. Put your Google service account file at `credentials.json`
+2. Share the target Google Drive folder with that service account email
+3. Set `GOOGLE_DRIVE_FOLDER_ID` in `.env`
+4. Run:
+
+```bash
+python sync_brain.py
+```
+
+That script downloads supported files from Drive into `knowledge_base/` and rebuilds the local Chroma database from them.
+
 ## API Endpoints
 - `GET /health`
 - `GET /api/health`

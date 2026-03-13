@@ -1,12 +1,16 @@
 import json
+import logging
 from typing import Any
 
 from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_http_methods
 
 from app.rafiki import feedback_store, get_answer, get_chatbot_mode
+
+logger = logging.getLogger("app")
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -33,16 +37,28 @@ def _parse_json(request: HttpRequest) -> dict[str, Any] | None:
 
 
 @csrf_exempt
-@require_http_methods(["POST", "OPTIONS"])
+@require_http_methods(["GET", "POST", "OPTIONS"])
 def chat(request: HttpRequest) -> JsonResponse:
+    if request.method == "GET":
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({"detail": "Use POST with a JSON body for chat requests."}, status=405)
+        return redirect("index")
     if request.method == "OPTIONS":
         return JsonResponse({}, status=204)
     payload = _parse_json(request)
     if payload is None:
+        logger.warning("Rejected invalid JSON payload on /api/chat")
         return JsonResponse({"error": "Invalid JSON payload"}, status=400)
     message = (payload.get("message") or "").strip()
     history = payload.get("history") or []
-    return JsonResponse({"response": get_answer(message, history)})
+    logger.info("Received chat request. message_length=%s history_items=%s", len(message), len(history))
+    try:
+        response_text = get_answer(message, history)
+        logger.info("Chat request completed successfully")
+        return JsonResponse({"response": response_text})
+    except Exception:
+        logger.exception("Unhandled error while processing /api/chat")
+        raise
 
 
 @csrf_exempt

@@ -33,8 +33,10 @@ def _parse_json(request: HttpRequest) -> dict[str, Any] | None:
 
 
 @csrf_exempt
-@require_http_methods(["POST"])
+@require_http_methods(["POST", "OPTIONS"])
 def chat(request: HttpRequest) -> JsonResponse:
+    if request.method == "OPTIONS":
+        return JsonResponse({}, status=204)
     payload = _parse_json(request)
     if payload is None:
         return JsonResponse({"error": "Invalid JSON payload"}, status=400)
@@ -44,8 +46,10 @@ def chat(request: HttpRequest) -> JsonResponse:
 
 
 @csrf_exempt
-@require_http_methods(["POST"])
+@require_http_methods(["POST", "OPTIONS"])
 def feedback(request: HttpRequest) -> JsonResponse:
+    if request.method == "OPTIONS":
+        return JsonResponse({}, status=204)
     payload = _parse_json(request)
     if payload is None:
         return JsonResponse({"success": False, "message": "Invalid JSON payload"}, status=400)

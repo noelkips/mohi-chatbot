@@ -27,6 +27,27 @@ Open `http://127.0.0.1:8000/`.
 - `POST /api/feedback`
 - `GET /feedback/stats`
 
+## Embed Widget
+Add this to any page that should open Rafiki from a floating icon:
+
+```html
+<script>
+  window.RafikiWidgetConfig = {
+    title: "Rafiki IT",
+    subtitle: "MOHI Support"
+  };
+</script>
+<script src="http://127.0.0.1:8000/static/app/js/rafiki-embed.js"></script>
+```
+
+Optional config keys:
+- `apiBase`: optional override. If omitted, the widget automatically uses the origin it was loaded from
+- `logoUrl`: override the widget logo
+- `title`: widget title
+- `subtitle`: widget subtitle
+- `primaryColor`: button/message accent color
+- `headerColor`: widget header color
+
 ## Structure
 - `config/`: Django project settings and top-level URLs
 - `app/views.py`: page and API handlers

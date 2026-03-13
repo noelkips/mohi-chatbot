@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#1c3c54">
+    <meta name="description" content="Rafiki IT - MOHI Support Assistant">
+    <title>Rafiki IT | MOHI Support</title>
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'app/css/chat.css' %}">
+</head>
+<body>
+    <main class="page-shell">
+        <section class="hero">
+            <img src="{% static 'mohi-it-logo.png' %}" alt="MOHI Logo" class="hero-logo">
+            <h1>MISSIONS OF HOPE INTERNATIONAL</h1>
+            <p class="hero-script">IT Support</p>
+            <div class="hero-card">
+                <p>
+                    Welcome to the MOHI Staff Portal. Click the green chat button in the bottom right corner to get
+                    IT support from <span class="accent">Rafiki</span>, your friendly IT assistant.
+                </p>
+                <p class="hero-muted">
+                    Rafiki can help with portal access, IT policies, and general support questions.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <button id="chat-fab-button" class="chat-fab" aria-label="Open chat">
+        <span class="fab-icon">💬</span>
+    </button>
+
+    <section id="chat-widget-container" class="chat-widget hidden" aria-live="polite">
+        <header class="chat-header">
+            <div class="chat-brand">
+                <img src="{% static 'mohi-it-logo.png' %}" alt="MOHI Logo" class="chat-logo">
+                <div>
+                    <h2>MISSIONS OF HOPE</h2>
+                    <p>Rafiki IT</p>
+                </div>
+            </div>
+            <div class="chat-actions">
+                <button id="theme-toggle-button" class="icon-button" aria-label="Toggle theme">◐</button>
+                <button id="chat-close-button" class="icon-button" aria-label="Close chat">✕</button>
+            </div>
+        </header>
+
+        <div id="chat-messages" class="chat-messages">
+            <section id="welcome-state" class="welcome-state">
+                <div class="welcome-icon">💬</div>
+                <h3>Hello! I'm Rafiki</h3>
+                <p>Your friendly IT assistant. How can I help you today?</p>
+                <div id="quick-actions-welcome" class="quick-actions"></div>
+            </section>
+            <div id="typing-indicator" class="typing-indicator hidden" aria-hidden="true">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+
+        <div id="quick-actions-bar" class="quick-actions-bar hidden"></div>
+
+        <form id="chat-form" class="chat-input-row">
+            <input id="chat-input" type="text" placeholder="Ask Rafiki about IT support..." autocomplete="off">
+            <button id="chat-send-button" type="submit" disabled>➤</button>
+        </form>
+    </section>
+
+    <script>
+        window.rafikiConfig = {
+            chatUrl: "{% url 'api-chat' %}",
+            feedbackUrl: "{% url 'api-feedback' %}"
+        };
+    </script>
+    <script src="{% static 'app/js/chat.js' %}"></script>
+</body>
+</html>

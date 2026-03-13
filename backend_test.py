@@ -9,7 +9,7 @@ import json
 from datetime import datetime
 
 class RafikiAPITester:
-    def __init__(self, base_url="http://localhost:8001"):
+    def __init__(self, base_url="http://localhost:8000"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
@@ -99,15 +99,13 @@ class RafikiAPITester:
         print("🏥 TESTING HEALTH ENDPOINTS")
         print("="*60)
         
-        # Test root health endpoint
         success1, response1 = self.run_test(
-            "Root Health Check",
-            "GET", 
-            "",
+            "Health Check",
+            "GET",
+            "health",
             200
         )
-        
-        # Test API health endpoint
+
         success2, response2 = self.run_test(
             "API Health Check", 
             "GET",
@@ -294,7 +292,7 @@ def main():
     success = tester.run_all_tests()
     
     # Save detailed results
-    results_file = "/app/test_reports/backend_api_results.json"
+    results_file = "test_reports/backend_api_results.json"
     with open(results_file, 'w') as f:
         json.dump({
             "timestamp": datetime.now().isoformat(),

@@ -55,7 +55,7 @@ if prompt:
         with st.spinner("Rafiki is consulting the MOHI knowledge base..."):
             try:
                 response = requests.post(
-                    "http://127.0.0.1:8080/chat", 
+                    "http://127.0.0.1:8000/api/chat",
                     json={"message": prompt, "history": st.session_state.messages},
                     timeout=30
                 )
@@ -65,6 +65,6 @@ if prompt:
                     st.markdown(answer)
                     st.session_state.messages.append({"role": "assistant", "content": answer})
                 else:
-                    st.warning("⚠️ Rafiki is currently offline. Please ensure the FastAPI server is running in the background.")
+                    st.warning("⚠️ Rafiki is currently offline. Please ensure the Django server is running in the background.")
             except Exception:
                 st.error("🔌 Connection Error: I can't reach the 'Brain' right now. Please notify the I.T. Department if this persists.")
